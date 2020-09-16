@@ -103,7 +103,7 @@ class Mpeg4Container(container.Container):
 
     def print_structure(self):
         """Print mpeg4 file structure recursively."""
-        print("mpeg4 [{}]".format(self.content_size))
+        print(("mpeg4 [{}]".format(self.content_size)))
 
         size = len(self.contents)
         for i in range(size):

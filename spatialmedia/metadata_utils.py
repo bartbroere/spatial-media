@@ -280,7 +280,7 @@ def parse_spherical_xml(contents, console):
 
     sphericalDictionary = dict()
     for child in parsed_xml.getchildren():
-        if child.tag in SPHERICAL_TAGS.keys():
+        if child.tag in list(SPHERICAL_TAGS.keys()):
             console("\t\t" + SPHERICAL_TAGS[child.tag]
                     + " = " + child.text)
             sphericalDictionary[SPHERICAL_TAGS[child.tag]] = child.text
@@ -445,7 +445,7 @@ def generate_spherical_xml(stereo=None, crop=None):
     if crop:
         crop_match = re.match(crop_regex, crop)
         if not crop_match:
-            print("Error: Invalid crop params: {crop}".format(crop=crop))
+            print(("Error: Invalid crop params: {crop}".format(crop=crop)))
             return False
         else:
             cropped_width_pixels = int(crop_match.group(1))
@@ -457,20 +457,20 @@ def generate_spherical_xml(stereo=None, crop=None):
 
             # This should never happen based on the crop regex.
             if full_width_pixels <= 0 or full_height_pixels <= 0:
-                print("Error with crop params: full pano dimensions are "\
+                print(("Error with crop params: full pano dimensions are "\
                         "invalid: width = {width} height = {height}".format(
                             width=full_width_pixels,
-                            height=full_height_pixels))
+                            height=full_height_pixels)))
                 return False
 
             if (cropped_width_pixels <= 0 or
                     cropped_height_pixels <= 0 or
                     cropped_width_pixels > full_width_pixels or
                     cropped_height_pixels > full_height_pixels):
-                print("Error with crop params: cropped area dimensions are "\
+                print(("Error with crop params: cropped area dimensions are "\
                         "invalid: width = {width} height = {height}".format(
                             width=cropped_width_pixels,
-                            height=cropped_height_pixels))
+                            height=cropped_height_pixels)))
                 return False
 
             # We are pretty restrictive and don't allow anything strange. There
@@ -483,14 +483,14 @@ def generate_spherical_xml(stereo=None, crop=None):
                     cropped_offset_top_pixels < 0 or
                     total_width > full_width_pixels or
                     total_height > full_height_pixels):
-                    print("Error with crop params: cropped area offsets are "\
+                    print(("Error with crop params: cropped area offsets are "\
                             "invalid: left = {left} top = {top} "\
                             "left+cropped width: {total_width} "\
                             "top+cropped height: {total_height}".format(
                                 left=cropped_offset_left_pixels,
                                 top=cropped_offset_top_pixels,
                                 total_width=total_width,
-                                total_height=total_height))
+                                total_height=total_height)))
                     return False
 
             additional_xml += SPHERICAL_XML_CONTENTS_CROP_FORMAT.format(
@@ -571,7 +571,7 @@ def get_sample_description_num_channels(sample_description, in_fh):
         audio_sample_rate = struct.unpack(">d", in_fh.read(8))[0]
         num_audio_channels = struct.unpack(">i", in_fh.read(4))[0]
     else:
-        print("Unsupported version for " + sample_description.name + " box")
+        print(("Unsupported version for " + sample_description.name + " box"))
         return -1
 
     in_fh.seek(p)
@@ -663,5 +663,5 @@ def get_spatial_audio_metadata(ambisonic_order, head_locked_stereo):
     }
     metadata['ambisonic_order'] = ambisonic_order
     metadata['head_locked_stereo'] = head_locked_stereo
-    metadata['channel_map'] = range(0, num_channels)
+    metadata['channel_map'] = list(range(0, num_channels))
     return metadata

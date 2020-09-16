@@ -23,13 +23,13 @@ GUI application for examining/injecting spatial media metadata in MP4/MOV files.
 import ntpath
 import os
 import sys
-import tkFileDialog
-import tkMessageBox
+import tkinter.filedialog
+import tkinter.messagebox
 import traceback
-import ttk
+import tkinter.ttk
 
 try:
-    from Tkinter import *
+    from tkinter import *
 except ImportError:
     print("Tkinter library is not available.")
     exit(0)
@@ -47,14 +47,14 @@ class Console(object):
         self.log = []
 
     def append(self, text):
-        print(text.encode('utf-8'))
+        print((text.encode('utf-8')))
         self.log.append(text)
 
 
 class Application(Frame):
     def action_open(self):
         """Triggers open file diaglog, reading a new file's metadata."""
-        tmp_in_file = tkFileDialog.askopenfilename(**self.open_options)
+        tmp_in_file = tkinter.filedialog.askopenfilename(**self.open_options)
         if not tmp_in_file:
             return
         self.in_file = tmp_in_file
@@ -98,7 +98,7 @@ class Application(Frame):
             self.var_spatial_audio.set(0)
 
         if metadata:
-            metadata = metadata.itervalues().next()
+            metadata = next(iter(metadata.values()))
 
             if metadata.get("Spherical", "") == "true":
                 self.var_spherical.set(1)
@@ -112,7 +112,7 @@ class Application(Frame):
 
         if audio_metadata:
             self.var_spatial_audio.set(1)
-            print(audio_metadata.get_metadata_string())
+            print((audio_metadata.get_metadata_string()))
 
         self.update_state()
 
@@ -144,7 +144,7 @@ class Application(Frame):
         extension = split_filename[1]
         self.save_options["initialfile"] = (base_filename
                                             + "_injected" + extension)
-        self.save_file = tkFileDialog.asksaveasfilename(**self.save_options)
+        self.save_file = tkinter.filedialog.asksaveasfilename(**self.save_options)
         if not self.save_file:
             return
 
@@ -268,15 +268,15 @@ class Application(Frame):
         buttons_frame = Frame(self)
         buttons_frame.grid(row=row, column=0, columnspan=3, padx=PAD_X, pady=10)
 
-        style = ttk.Style() 
+        style = tkinter.ttk.Style() 
         style.configure('TButton', foreground="black") 
 
-        self.button_open = ttk.Button(buttons_frame)
+        self.button_open = tkinter.ttk.Button(buttons_frame)
         self.button_open["text"] = "Open"
         self.button_open["command"] = self.action_open
         self.button_open.grid(row=0, column=0, padx=14, pady=2)
 
-        self.button_inject = ttk.Button(buttons_frame)
+        self.button_inject = tkinter.ttk.Button(buttons_frame)
         self.button_inject["text"] = "Inject metadata"
         self.button_inject["command"] = self.action_inject
         self.button_inject.grid(row=0, column=1, padx=14, pady=2)
@@ -304,7 +304,7 @@ class Application(Frame):
 
 def report_callback_exception(self, *args):
     exception = traceback.format_exception(*args)
-    tkMessageBox.showerror("Error", exception)
+    tkinter.messagebox.showerror("Error", exception)
 
 def main():
     root = Tk()
